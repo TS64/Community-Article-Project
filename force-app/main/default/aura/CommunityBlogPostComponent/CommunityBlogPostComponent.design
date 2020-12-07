@@ -1,0 +1,10 @@
+<design:component>
+    <design:attribute name="title_field" label="Title" required="true" default="Title" description="The field to use as the title of the article."/>
+    <design:attribute name="summary_field" label="Summary" required="true" default="Summary" description="The field to use as the summary or body of the article."/>
+    <design:attribute name="datetime" label="Datetime" default="FirstPublishedDate" description="The field to use as the displayed date on the article."/>
+    <design:attribute name="image_field" label="Image field" description="The URL linked to an image to display on the article."/>
+    <design:attribute name="image_dimensions" label="Image Dimensions" description="Dimensions to display the image in. As an example, use the format 100x200, with height first and width second. Leaving this field blank will"/>
+    <design:attribute name="image_position" label="Image Position" default="Top-Left" datasource="Top-Left,Top-Right,Full Width" description="Display the image either on the left, right or top of the article."/>
+    <design:attribute name="article_page_url" label="Community Article Page URL" description="Selecting a topic on the article will re-direct to this URL to perform a topic search. Leaving this field empty will result in a topic search occuring on the current page."/>
+    <design:attribute name="namespace" label="Namespace Prefix" default="" description="If your Knowledge__kav object has a namespace prefix from creating packages, like PexlifyArticles, enter the namespace without the two trailing underscores. Otherwise, leave this blank."/>
+</design:component>

@@ -1,0 +1,68 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="Pexlify_Article.CommunityArticleComponentController">
+    <aura:handler event="Pexlify_Article:clearTopicEvent" action="{!c.clearSearch}"/>
+    <aura:handler event="Pexlify_Article:searchCategoryEvent" action="{!c.setSelectedTopic}"/>
+    <aura:handler event="Pexlify_Article:searchTermEvent" action="{!c.trackSearchTerm}"/>
+    <aura:registerEvent name="searchCategoryEvent" type="Pexlify_Article:searchCategoryEvent"/>
+
+    <aura:attribute name="article_page_url" type="String" default="" access="global"/>
+    <aura:attribute name="topic_list_starts" type="Integer[]" default="[0]"/>
+    <aura:attribute name="topic_list_starts_mobile" type="Integer[]" default="[0]"/>
+    <aura:attribute name="row_length" type="Integer" default="6" access="global"/>
+    <aura:attribute name="row_length_mobile" type="Integer" default="2" access="global"/>
+    <aura:attribute name="keywords" type="String[]"/>
+    <aura:attribute name="selected_topic" type="String" default=""/>
+    <aura:attribute name="current_search_term" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:if isTrue="{! !empty(v.keywords)}">
+        <aura:if isTrue="{! !$Browser.isPhone}">
+            <aura:iteration var="start" items="{!v.topic_list_starts}">
+                <lightning:layout horizontalAlign="space" multipleRows="true">
+                    <aura:iteration var="keyword" items="{!v.keywords}" start="{!start}" end="{!start + v.row_length}">
+                        <aura:if isTrue="{!v.selected_topic != keyword}">
+                            <lightning:layoutItem flexibility="auto">
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button aura:id="topicButton" variant="base" value="{!keyword}" label="{!keyword}" disabled="false" title="{!keyword}" onclick="{!c.selectedCategory}"/>
+                                </div>
+                            </lightning:layoutItem>
+                        <aura:set attribute="else">
+                            <lightning:layoutItem flexibility="auto">
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button aura:id="topicButton" variant="base" value="{!keyword}" label="{!keyword}" disabled="true" title="{!keyword}" onclick="{!c.selectedCategory}"/>
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:layout>
+            </aura:iteration>
+        </aura:if>
+
+        <aura:if isTrue="{!$Browser.isPhone}">
+            <aura:iteration var="start" items="{!v.topic_list_starts_mobile}">
+                <lightning:layout horizontalAlign="space" multipleRows="true">
+                    <aura:iteration var="keyword" items="{!v.keywords}" start="{!start}" end="{!start + v.row_length_mobile}">
+                        <aura:if isTrue="{!v.selected_topic != keyword}">
+                            <lightning:layoutItem flexibility="auto">
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button aura:id="topicButton" variant="base" value="{!keyword}" label="{!keyword}" disabled="false" title="{!keyword}" onclick="{!c.selectedCategory}"/>
+                                </div>
+                            </lightning:layoutItem>
+                        <aura:set attribute="else">
+                            <lightning:layoutItem flexibility="auto">
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button aura:id="topicButton" variant="base" value="{!keyword}" label="{!keyword}" disabled="true" title="{!keyword}" onclick="{!c.selectedCategory}"/>
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:set>
+                        </aura:if>
+                    </aura:iteration>
+                </lightning:layout>
+            </aura:iteration>
+        </aura:if>
+    <aura:set attribute="else">
+        <div class="slds-text-heading_small slds-text-align_center">There are no available topics.</div>
+    </aura:set>
+    </aura:if>
+    
+</aura:component>

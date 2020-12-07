@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Send search result" access="global">
+    <aura:attribute name="queryText" type="String"/>
+</aura:event>

@@ -1,0 +1,90 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PexlifyArticle.CommunityArticleComponentController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="searchCategoryEvent" type="PexlifyArticle:searchCategoryEvent"/>
+
+    <aura:attribute name="article" type="Knowledge__kav"/>
+    <aura:attribute name="datetime" type="String" default="FirstPublishedDate" access="global"/>
+    <aura:attribute name="title_field" type="String" default="Title" required="true" access="global"/>
+    <aura:attribute name="summary_field" type="String" default="Summary" required="true" access="global"/>
+    <aura:attribute name="image_field" type="String" access="global"/>
+    <aura:attribute name="image_dimensions" type="String" access="global"/>
+    <aura:attribute name="image_height" type="String"/>
+    <aura:attribute name="image_width" type="String"/>
+    <aura:attribute name="image_position" type="String" default="Top-left" access="global"/>
+    <aura:attribute name="article_page_url" type="String" default="" access="global"/>
+    <aura:attribute name="topics" type="String[]" default="[]"/>
+    <aura:attribute name="namespace" type="String" default=""/>
+
+    <div class="slds-scrollable--y">
+        <aura:if isTrue="{!v.article != null}">
+                <aura:if isTrue="{!or (v.image_position == 'Full Width', $Browser.isPhone)}">
+                    <aura:if isTrue="{! !empty(v.image_field)}">
+                        <div class="slds-align_absolute-center slds-p-around_medium">
+                            <img src="{!v.image_field}" style="width:100%" alt="Blog Post"/>
+                        </div>
+                    </aura:if>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!and (v.image_position == 'Top-Left', !empty(v.image_field))}">
+                        <aura:if isTrue="{! empty(v.image_dimensions)}">
+                            <div class="slds-float_left slds-p-right_large slds-p-bottom_xx-small slds-p-top_xx-small slds-p-left_xx-small">
+                                <img src="{!v.image_field}" alt="Blog Post"/>
+                            </div>
+                        <aura:set attribute="else">
+                            <div class="slds-float_left slds-p-right_large slds-p-bottom_xx-small slds-p-top_xx-small slds-p-left_xx-small">
+                                <img src="{!v.image_field}" height="{!v.image_height}" width="{!v.image_width}" alt="Blog Post"/>
+                            </div>
+                        </aura:set>
+                        </aura:if>
+                    </aura:if>
+                    <aura:if isTrue="{!and (v.image_position == 'Top-Right', !empty(v.image_field))}">
+                        <aura:if isTrue="{! empty(v.image_dimensions)}">
+                            <div class="slds-float_right slds-p-around_medium slds-p-left_large">
+                                <img src="{!v.image_field}" alt="Blog Post"/>
+                            </div>
+                        <aura:set attribute="else">
+                            <div class="slds-float_right slds-p-around_medium slds-p-left_large">
+                                <img src="{!v.image_field}" height="{!v.image_height}" width="{!v.image_width}" alt="Blog Post"/>
+                            </div>
+                        </aura:set>
+                        </aura:if>
+                    </aura:if>
+                </aura:set>
+                </aura:if>
+
+            <div class="slds-text-heading_large"><b>
+                <aura:if isTrue="{!$Browser.isPhone}">
+                    <div class="slds-text-align_center">{!v.article.Title}</div>
+                <aura:set attribute="else">
+                    <div class="slds-p-left_x-small">{!v.article.Title}</div>
+                </aura:set>
+                </aura:if>
+            </b></div>
+
+            <div class="slds-p-left_x-small slds-p-vertical_small">
+                <lightning:layout verticalAlign="center" multipleRows="true">
+                    <aura:iteration var="topic" items="{!v.topics}">
+                        <lightning:layoutItem>
+                            <div class="slds-p-right_xx-small">
+                                <lightning:button aura:id="topicButton" variant="neutral" value="{!topic}" label="{!topic}" disabled="false" title="{!topic}" onclick="{!c.searchForTopic}"/>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:iteration>
+                </lightning:layout>
+            </div>
+
+            <aura:if isTrue="{!v.datetime != 'None'}">
+                <div class="slds-text-body_small slds-p-top_xxx-small slds-p-left_x-small">
+                    {!v.article.Date}
+                </div>
+            </aura:if>
+            
+            <div class="slds-p-left_x-small slds-p-top_large slds-p-bottom_xxx-small"><lightning:formattedRichText value="{!v.article.Summary}"/></div>
+            
+        <aura:set attribute="else">
+            <div class="slds-text-heading_small">
+                No article could be found with the specified ID.
+            </div>
+        </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

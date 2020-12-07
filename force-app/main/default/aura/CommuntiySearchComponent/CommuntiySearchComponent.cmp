@@ -1,0 +1,72 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable" access="global" controller="PexlifyArticle.CommunityArticleComponentController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="PexlifyArticle:clearSearchEvent" action="{!c.clearSearch}"/>
+    <aura:handler event="PexlifyArticle:searchCategoryEvent" action="{!c.trackTopicSearch}"/>
+    <aura:registerEvent name="searchTermEvent" type="PexlifyArticle:searchTermEvent"/>
+
+    <aura:attribute name="article_page_url" type="String" default="" access="global"/>
+    <aura:attribute name="current_topic" type="String" default="" access="global"/>
+    <aura:attribute name="display_search_button_on_desktop" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="display_search_button_on_mobile" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="isSearching" type="Boolean" default="false"/>
+
+    <aura:if isTrue="{! !$Browser.isPhone}">
+        <lightning:layout verticalAlign="end">
+            <lightning:layoutItem flexibility="grow">
+                <aura:if isTrue="{!v.pageReference.state.searchText == null || !v.pageReference.state.searchText == ''}">
+                    <div onkeyup="{!c.handleKeyUp}" class="slds-p-left_x-small slds-p-right_xx-small">
+                        <lightning:input aura:id="enter-search"
+                                        name="Search when user hits the 'enter' key"
+                                        placeholder="Search for an article..."
+                                        isLoading="{!v.isSearching}"
+                                        type="search"/>
+                    </div>
+                    <aura:set attribute="else">
+                        <div onkeyup="{!c.handleKeyUp}" class="slds-p-left_x-small slds-p-right_xx-small">
+                            <lightning:input aura:id="enter-search"
+                                            name="Search when user hits the 'enter' key"
+                                            placeholder="{!v.pageReference.state.searchText}"
+                                            isLoading="{!v.isSearching}"
+                                            type="search"/>
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem>
+                <aura:if isTrue="{!v.display_search_button_on_desktop}">
+                    <div class="slds-float_right slds-p-left_xx-small slds-p-right_x-small">
+                        <lightning:button label="Search" iconName="utility:search" iconPosition="left" variant="brand" onclick="{!c.performSearch}"/>
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!$Browser.isPhone}">
+        <aura:if isTrue="{!v.pageReference.state.searchText == null || !v.pageReference.state.searchText == ''}">
+            <div onkeyup="{!c.handleKeyUp}" class="slds-p-left_xx-small slds-p-right_xx-small">
+                <lightning:input aura:id="enter-search"
+                                name="Search when user hits the 'enter' key"
+                                placeholder="Search for an article..."
+                                isLoading="{!v.isSearching}"
+                                type="search"/>
+            </div>
+            <aura:set attribute="else">
+                <div onkeyup="{!c.handleKeyUp}" class="slds-p-left_x-small slds-p-right_xx-small">
+                    <lightning:input aura:id="enter-search"
+                                    name="Search when user hits the 'enter' key"
+                                    placeholder="{!v.pageReference.state.searchText}"
+                                    isLoading="{!v.isSearching}"
+                                    type="search"/>
+                </div>
+            </aura:set>
+        </aura:if>
+
+        <aura:if isTrue="{!v.display_search_button_on_mobile}">
+            <div class="slds-align_absolute-center slds-p-top_xx-small">
+                <lightning:button label="Search" iconName="utility:search" iconPosition="left" variant="brand" onclick="{!c.performSearch}"/>
+            </div>
+        </aura:if>
+    </aura:if>
+</aura:component>

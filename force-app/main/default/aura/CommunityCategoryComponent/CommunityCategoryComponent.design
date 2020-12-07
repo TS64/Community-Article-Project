@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="article_page_url" label="Community Article Page URL" description="Selecting a topic will re-direct to this URL to perform a topic search. Leaving this field empty will result in a topic search occuring on the current page."/>
+    <design:attribute name="row_length" label="Number of topics per row on desktop/tablet" min="1" max="12" description="The number of topics to display on each row on desktop/tablet screens. Each row can display a maximum of 12 topics at once."/>
+    <design:attribute name="row_length_mobile" label="Number of topics per row on mobile screens" min="1" max="12" description="The number of topics to display on each row on mobile screens. Each row can display a maximum of 12 topics at once."/>
+</design:component>

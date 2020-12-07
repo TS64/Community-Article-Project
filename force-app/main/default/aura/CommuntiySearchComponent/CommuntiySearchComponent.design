@@ -1,0 +1,5 @@
+<design:component>
+	<design:attribute name="article_page_url" label="Community Article Page URL" description="Confirming a search will re-direct to this URL to perform a keyword search. Leaving this field empty will result in a keyword search occuring on the current page."/>
+	<design:attribute name="display_search_button_on_desktop" label="Display Search button on desktop/tablet" default="false" description="Toggle whether to display a search button below the search bar on desktop/tablet devices."/>
+	<design:attribute name="display_search_button_on_mobile" label="Display Search button on mobile" default="true" description="Toggle whether to display a search button below the search bar on mobile devices."/>
+</design:component>

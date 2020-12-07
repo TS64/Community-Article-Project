@@ -1,0 +1,120 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="Pexlify_Article.CommunityArticleComponentController">
+    <aura:html tag="style">.toastMessage.forceActionsText{white-space : pre-line !important;}</aura:html>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="Pexlify_Article:searchTermEvent" action="{!c.performTextSearch}"/>
+    <aura:handler event="Pexlify_Article:searchCategoryEvent" action="{!c.performTopicSearch}"/>
+    <aura:registerEvent name="clearSearchEvent" type="Pexlify_Article:clearSearchEvent"/>
+    <aura:registerEvent name="clearTopicEvent" type="Pexlify_Article:clearTopicEvent"/>
+    
+    <aura:attribute name="articles" type="KnowledgeArticleVersion[]"/>
+
+    <aura:attribute name="title" type="String" default="Title" required="true" access="global"/>
+    <aura:attribute name="summary" type="String" default="Summary" required="true" access="global"/>
+    <aura:attribute name="summary_length" type="Integer" default="100" access="global"/>
+    <aura:attribute name="display_topics" type="Boolean" default="True" access="global"/>
+    <aura:attribute name="category" type="String" default="Topic"/>
+    <aura:attribute name="datetime" type="String" default="FirstPublishedDate" access="global"/>
+    <aura:attribute name="sort_field" type="String" default="Title" access="global"/>
+    <aura:attribute name="sort_order" type="String" default="Descending" access="global"/>
+    <aura:attribute name="image_field" type="String" access="global"/>
+    <aura:attribute name="search_field" type="String" default="Title, Summary" required="true" access="global"/>
+    <aura:attribute name="search_category" type="String" default="Topic" required="true"/>
+    <aura:attribute name="blog_page" type="String" default="" access="global"/>
+    <aura:attribute name="current_topic" type="String" default=""/>
+    <aura:attribute name="current_search" type="String" default=""/>
+    <aura:attribute name="namespace" type="String" default=""/>
+    
+    <aura:if isTrue="{!and(v.current_topic != '', v.current_search != '')}">
+        <lightning:layout verticalAlign="center">
+            <lightning:layoutItem>
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{!c.clearSearch}" alternativeText="Clear Search"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem>
+                <div class="slds-text-body_regular">
+                    Searching by Topic: {!v.current_topic}, Keyword: {!v.current_search}
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!and(v.current_topic != '', v.current_search == '')}">
+        <lightning:layout verticalAlign="center">
+            <lightning:layoutItem>
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{!c.clearSearch}" alternativeText="Clear Search"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem>
+                <div class="slds-text-body_regular">
+                    Searching by Topic: {!v.current_topic}
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!and(v.current_topic == '', v.current_search != '')}">
+        <lightning:layout verticalAlign="center">
+            <lightning:layoutItem>
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{!c.clearSearch}" alternativeText="Clear Search"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem>
+                <div class="slds-text-body_regular">
+                    Searching by Keyword: {!v.current_search}
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{! !empty(v.articles)}">
+        <aura:iteration var="article" items="{!v.articles}" indexVar="index">
+            <div class="slds-p-bottom_small">
+                <div class="slds-box slds-grid slds-wrap">
+
+                    <aura:if isTrue="{!and(!empty(v.image_field), !$Browser.isPhone)}">
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_4-of-12 slds-large-size_2-of-12 slds-p-right_medium">
+                            <a href="javascript:void(0)" class="slds-text-link" data-record="{!index}" onclick="{!c.goToArticlePage}">
+                                <img src="{!v.image_field}"/>
+                            </a>
+                        </div>
+                    </aura:if>
+
+                    <div class="slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-large-size_10-of-12">
+                        <div class="slds-text-heading_medium">
+                            <a href="javascript:void(0)" class="slds-text-link" data-record="{!index}" onclick="{!c.goToArticlePage}">
+                                <b>
+                                    <aura:if isTrue="{!$Browser.isPhone}">
+                                        <div class="slds-text-align_center">{!article.Title}</div>
+                                    <aura:set attribute="else">
+                                        {!article.Title}
+                                    </aura:set>
+                                    </aura:if>
+                                </b>
+                            </a>
+                        </div>
+                        <div class="slds-text-body_small slds-p-bottom_xxx-small">
+                            {!article.Summary}
+                        </div>
+                        <aura:if isTrue="{!v.display_topics}">
+                            <lightning:layout verticalAlign="center" multipleRows="true">
+                                <aura:iteration var="topic" items="{!article.Topics}">
+                                    <lightning:layoutItem>
+                                        <div class="slds-p-right_xx-small slds-p-top_xxx-small"><lightning:badge label="{!topic}"/></div>
+                                    </lightning:layoutItem>
+                                </aura:iteration>
+                            </lightning:layout>
+                        </aura:if>
+
+                        <aura:if isTrue="{!v.datetime != 'None'}">
+                            <div class="slds-text-body_small slds-p-top_xxx-small">
+                                {!article.Date}
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </aura:iteration>
+    <aura:set attribute="else">
+        <div class="slds-text-heading_small slds-text-align_center">No articles could be found using your search criteria.</div>
+    </aura:set>
+    </aura:if>
+	
+</aura:component>

@@ -1,0 +1,13 @@
+<design:component>
+    <design:attribute name="title" label="Title" required="true" default="Title" description="The API name of the knowledge field to use as the title of the displayed articles."/>
+    <design:attribute name="summary" label="Summary" required="true" default="Summary" description="The API name of the knowledge field to use as the summary or body of the displayed articles."/>
+    <design:attribute name="summary_length" label="Length of Summary" description="The number of characters to display in the displayed articles' summaries. Leaving this field empty will result in the entire summary being displayed."/>
+    <design:attribute name="display_topics" label="Display article's topics" description="Toggle whether to display the displayed articles' topics."/>
+    <design:attribute name="datetime" label="Datetime" default="FirstPublishedDate" description="The API name of the knowledge field to display as the date on the displayed articles."/>
+    <design:attribute name="sort_field" label="Sort by Field" default="Title" required="true" description="The API name of the knowledge field that the displayed articles will be sorted by."/>
+    <design:attribute name="sort_order" label="Sort Order" default="Descending" datasource="Descending,Ascending" description="Choose whether to display the articles in descending or ascending order, depending on the sort field above."/>
+    <design:attribute name="image_field" label="Image field" description="The URL linked to the image to display next to the displayed articles."/>
+    <design:attribute name="search_field" label="Fields search for text" default="Title, Summary" required="true" description="In the event of a keyword search, these fields will be searched using the given search phrase. Enter the API names of the required fields, separated by commas. (e.g. Title, Summary)"/>
+    <design:attribute name="blog_page" label="Blog Page Url" default="" description="Clicking on the title of an article will re-direct to this URL, passing the article ID as a parameter."/>
+    <design:attribute name="namespace" label="Namespace Prefix" default="" description="If your Knowledge__kav object has a namespace prefix from creating packages, like PexlifyArticles, enter the namespace without the two trailing underscores. Otherwise, leave this blank."/>
+</design:component>
